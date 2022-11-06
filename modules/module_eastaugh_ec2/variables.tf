@@ -37,7 +37,7 @@ variable "security_groups" {
 }
 
 variable "create_eip" {
-  type = bool
-  default = false
+  type        = bool
+  default     = false
   description = "whether to create an EIP for the ec2 instance or not"
 }

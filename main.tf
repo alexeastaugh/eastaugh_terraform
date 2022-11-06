@@ -37,11 +37,11 @@ module "vpc" {
 module "ec2_application" {
   source = "./modules/module_eastaugh_ec2"
 
-  infra_env     = var.infra_env
-  infra_role    = "web"
-  instance_size = "t3.micro"
-  instance_ami  = data.aws_ami.ubuntu.id
-  subnets       = keys(module.vpc.vpc_public_subnets)
-  // security_groups = [] # TODO: Create security groups
-  create_eip = true
+  infra_env       = var.infra_env
+  infra_role      = "web"
+  instance_size   = "t3.micro"
+  instance_ami    = data.aws_ami.ubuntu.id
+  subnets         = keys(module.vpc.vpc_public_subnets)
+  security_groups = [module.vpc.security_group_public]
+  create_eip      = true
 }

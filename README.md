@@ -1,5 +1,7 @@
 ## Terraform Playground
 
+I'm using this space to just build something and iterate over while I learn new parts of terraform
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 

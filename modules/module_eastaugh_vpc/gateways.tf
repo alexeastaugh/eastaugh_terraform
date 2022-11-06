@@ -73,7 +73,7 @@ resource "aws_route_table" "public" {
 // Private Route Tables (Subnets with NGW)
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.vpc.id
- 
+
   tags = {
     Name        = "eastaugh-${var.infra_env}-private-rt"
     VPC         = aws_vpc.vpc.id
