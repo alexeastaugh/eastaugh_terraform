@@ -4,12 +4,10 @@
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
 
-  tags = {
-    Name        = "eastaugh-${var.infra_env}-igw"
-    Environment = var.infra_env
-    VPC         = aws_vpc.vpc.id
-    ManagedBy   = "terraform"
-  }
+  tags = merge(local.common_tags, {
+    Name = "eastaugh-${var.infra_env}-igw"
+    VPC  = aws_vpc.vpc.id
+  })
 }
 
 resource "aws_eip" "nat" {
@@ -19,13 +17,11 @@ resource "aws_eip" "nat" {
     //prevent_destroy = true
   }
 
-  tags = {
-    Name        = "eastaugh-${var.infra_env}-eip"
-    Environment = var.infra_env
-    VPC         = aws_vpc.vpc.id
-    ManagedBy   = "terraform"
-    Role        = "private"
-  }
+  tags = merge(local.common_tags, {
+    Name = "eastaugh-${var.infra_env}-eip"
+    VPC  = aws_vpc.vpc.id
+    Role = "private"
+  })
 }
 
 /* Note: We're only creating one NAT Gateway, potential single point of failure
@@ -44,13 +40,11 @@ resource "aws_nat_gateway" "ngw" {
   */
   subnet_id = aws_subnet.public[element(keys(aws_subnet.public), 0)].id
 
-  tags = {
-    Name        = "eastaugh-${var.infra_env}-ngw"
-    VPC         = aws_vpc.vpc.id
-    Environment = var.infra_env
-    ManagedBy   = "terraform"
-    Role        = "private"
-  }
+  tags = merge(local.common_tags, {
+    Name = "eastaugh-${var.infra_env}-ngw"
+    VPC  = aws_vpc.vpc.id
+    Role = "private"
+  })
 }
 
 //
@@ -61,26 +55,22 @@ resource "aws_nat_gateway" "ngw" {
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.vpc.id
 
-  tags = {
-    Name        = "eastaugh-${var.infra_env}-public-rt"
-    VPC         = aws_vpc.vpc.id
-    Environment = var.infra_env
-    ManagedBy   = "terraform"
-    Role        = "public"
-  }
+  tags = merge(local.common_tags, {
+    Name = "eastaugh-${var.infra_env}-public-rt"
+    VPC  = aws_vpc.vpc.id
+    Role = "public"
+  })
 }
 
 // Private Route Tables (Subnets with NGW)
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.vpc.id
 
-  tags = {
-    Name        = "eastaugh-${var.infra_env}-private-rt"
-    VPC         = aws_vpc.vpc.id
-    Environment = var.infra_env
-    ManagedBy   = "terraform"
-    Role        = "private"
-  }
+  tags = merge(local.common_tags, {
+    Name = "eastaugh-${var.infra_env}-private-rt"
+    VPC  = aws_vpc.vpc.id
+    Role = "private"
+  })
 }
 
 // Public Route

@@ -2,11 +2,9 @@
 resource "aws_vpc" "vpc" {
   cidr_block = var.vpc_cidr
 
-  tags = {
-    "Name"        = "eastaugh-${var.infra_env}-vpc"
-    "Environment" = var.infra_env
-    "ManagedBy"   = "terraform"
-  }
+  tags = merge(local.common_tags, {
+    "Name" = "eastaugh-${var.infra_env}-vpc"
+  })
 }
 
 // Create a public subnet for each AZ within the regional VPC
@@ -19,13 +17,11 @@ resource "aws_subnet" "public" {
   // 2,048 IP addesses each
   cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, 4, each.value)
 
-  tags = {
-    Name        = "eastaugh-${var.infra_env}-public-subnet"
-    Role        = "public"
-    Environment = var.infra_env
-    ManagedBy   = "terraform"
-    Subnet      = "${each.key}-${each.value}"
-  }
+  tags = merge(local.common_tags, {
+    Name   = "eastaugh-${var.infra_env}-public-subnet"
+    Role   = "public"
+    Subnet = "${each.key}-${each.value}"
+  })
 }
 
 // Create a private subnet for each AZ within the regional VPC
@@ -38,11 +34,9 @@ resource "aws_subnet" "private" {
   // 2,048 IP addesses each
   cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, 4, each.value)
 
-  tags = {
-    Name        = "eastaugh-${var.infra_env}-private-subnet"
-    Role        = "private"
-    Environment = var.infra_env
-    ManagedBy   = "terraform"
-    Subnet      = "${each.key}-${each.value}"
-  }
+  tags = merge(local.common_tags, {
+    Name   = "eastaugh-${var.infra_env}-private-subnet"
+    Role   = "private"
+    Subnet = "${each.key}-${each.value}"
+  })
 }

@@ -7,12 +7,10 @@ resource "aws_security_group" "public" {
   description = "Public internet access"
   vpc_id      = aws_vpc.vpc.id
 
-  tags = {
-    Name        = "eastaugh-${var.infra_env}-public-sg"
-    Role        = "public"
-    Environment = var.infra_env
-    ManagedBy   = "terraform"
-  }
+  tags = merge(local.common_tags, {
+    Name = "eastaugh-${var.infra_env}-public-sg"
+    Role = "public"
+  })
 }
 
 resource "aws_security_group_rule" "public_out" {
@@ -61,12 +59,10 @@ resource "aws_security_group" "private" {
   description = "Private internet access"
   vpc_id      = aws_vpc.vpc.id
 
-  tags = {
-    Name        = "eastaugh-${var.infra_env}-private-sg"
-    Role        = "private"
-    Environment = var.infra_env
-    ManagedBy   = "terraform"
-  }
+  tags = merge(local.common_tags, {
+    Name = "eastaugh-${var.infra_env}-private-sg"
+    Role = "private"
+  })
 }
 
 resource "aws_security_group_rule" "private_out" {

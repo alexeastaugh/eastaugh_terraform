@@ -18,12 +18,7 @@ resource "aws_instance" "web" {
     create_before_destroy = false
   }
 
-  tags = {
-    Name        = "eastaugh-${var.infra_env}-${var.infra_role}"
-    Role        = var.infra_role
-    Environment = var.infra_env
-    ManagedBy   = "terraform"
-  }
+  tags = local.tags
 }
 
 resource "aws_eip" "eastaugh_addr" {
@@ -34,12 +29,7 @@ resource "aws_eip" "eastaugh_addr" {
     prevent_destroy = false
   }
 
-  tags = {
-    Name        = "eastaugh-${var.infra_env}-web-address"
-    Role        = var.infra_role
-    Environment = var.infra_env
-    ManagedBy   = "terraform"
-  }
+  tags = local.tags
 }
 
 // Seperate resource to associate eip so that it doesnt get removed by mistake
